@@ -3,9 +3,6 @@ from django.db import models
 from video.models import Video
 
 
-# Create your models here.
-
-
 class VideoFrame(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     frame_image = models.ImageField(upload_to='videos_frame/')

@@ -1,13 +1,11 @@
-from video import apps
-from django.urls import path, include
-from rest_framework import routers
+from video.apps import VideoConfig
+
+from rest_framework.routers import DefaultRouter
 from .views import VideoViewSet
 
-app_name = apps.VideoConfig
+app_name = VideoConfig.name
 
-router = routers.DefaultRouter()
-router.register(r'videos', VideoViewSet)
+router = DefaultRouter()
+router.register(r'', VideoViewSet, basename='Video')
 
-urlpatterns = [
-    path('video/', include(router.urls)),
-]
+urlpatterns = router.urls
