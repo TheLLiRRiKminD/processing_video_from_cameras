@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'django_celery_beat',
 
     'users',
     'video',
@@ -141,4 +142,16 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+
+CELERY_TASK_TRACK_STARTED = True
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # URL для брокера сообщений
+CELERY_BEAT_SCHEDULE = {
+    'delete_old_videos': {
+        'task': 'video.tasks.delete_old_videos_task',
+        'schedule': 30 * 24 * 60 * 60,  # раз в месяц (30 дней)
+    },
 }

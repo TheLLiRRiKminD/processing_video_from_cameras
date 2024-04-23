@@ -13,3 +13,7 @@ class VideoFrame(models.Model):
 
     def __str__(self):
         return f"Frame {self.id} of {self.video}"
+
+    class Meta:
+        verbose_name = 'Video Frame'
+        verbose_name_plural = 'Video Frames'

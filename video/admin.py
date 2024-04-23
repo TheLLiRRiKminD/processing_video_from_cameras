@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from video.models import Video
+
+
+@admin.register(Video)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'created_at',)
