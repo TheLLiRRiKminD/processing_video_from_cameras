@@ -6,7 +6,7 @@ from video.models import Video
 class VideoFrame(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     frame_image = models.ImageField(upload_to='videos_frame/')
-    timestamp = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Frame {self.id} of {self.video}"
