@@ -39,6 +39,7 @@
     - DJANGO_DEBUG= 
     - DJANGO_ALLOWED_HOSTS= 
     - TZ=
+    - RTSP_CAMERA_URL=
 
 3. Примените миграции:
     - python manage.py migrate
