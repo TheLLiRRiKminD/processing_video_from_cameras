@@ -18,7 +18,7 @@ def create_processed_frames(instance, created, fps=5, **kwargs):
         # Проверить, открыт ли объект видеозахвата
         if not cap.isOpened():
             print("Не удалось открыть видеофайл.")
-            return
+            return None
 
         # Создать каталог для сохранения дешумленных кадров
         import os
