@@ -1,20 +1,24 @@
-import os
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import viewsets
 import cv2
 import time
-from video.serializers import VideoSerializer
+from video.models import RTSUrl, Video
+from video.serializers import VideoSerializer, RTSUrlSerializer
 from video_frame.models import VideoFrame
 
 
 class VideoViewSet(viewsets.ModelViewSet):
     serializer_class = VideoSerializer
+    queryset = Video.objects.all()
 
     def create(self, request, **kwargs):
         try:
-            rtsp_url = os.getenv('RTSP_CAMERA_URL')
-            cap = cv2.VideoCapture(rtsp_url)
-
+            rtsp_id = request.data.get('RTSUrl_id')
+            if rtsp_id is None:
+                return Response({"message": "Отсутствует идентификатор камеры в запросе"}, status=400)
+            camera = get_object_or_404(RTSUrl, id=rtsp_id)  # Получение ссылки на камеру по ключу
+            cap = cv2.VideoCapture(camera.URL)
             if not cap.isOpened():
                 return Response({'error': 'Failed to open RTSP stream'}, status=500)
 
@@ -46,3 +50,8 @@ class VideoViewSet(viewsets.ModelViewSet):
             return Response({'message': 'Кадры видео сохранены и обработаны для удаления шума'}, status=200)
         except Exception as e:
             return Response({'error': str(e)}, status=500)
+
+
+class RTSUrlViewSet(viewsets.ModelViewSet):
+    queryset = RTSUrl.objects.all()
+    serializer_class = RTSUrlSerializer
