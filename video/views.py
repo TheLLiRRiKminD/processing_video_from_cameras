@@ -1,20 +1,28 @@
-import os
-import time
+from django.shortcuts import get_object_or_404
 import ffmpeg
 from rest_framework.response import Response
 from rest_framework import viewsets
 import cv2
+from video.models import RTSUrl, Video
+from video.serializers import VideoSerializer, RTSUrlSerializer
 import numpy as np
 from video_frame.models import VideoFrame
 
 
 class VideoViewSet(viewsets.ModelViewSet):
+    serializer_class = VideoSerializer
+    queryset = Video.objects.all()
+
     def create(self, request, **kwargs):
         try:
-            rtsp_url = os.getenv('RTSP_CAMERA_URL')
+            rtsp_id = request.data.get('RTSUrl_id')
+            if rtsp_id is None:
+                return Response({"message": "Отсутствует идентификатор камеры в запросе"}, status=400)
+            camera = get_object_or_404(RTSUrl, id=rtsp_id)
+
             process = (
                 ffmpeg
-                .input(rtsp_url, rtsp_transport='tcp',
+                .input(camera, rtsp_transport='tcp',
                        timeout=0)  # Устанавливаем время ожидания в 0 для бесконечного ожидания
                 .output('pipe:', format='rawvideo', pix_fmt='bgr24')
                 .run_async(pipe_stdout=True)
@@ -42,3 +50,8 @@ class VideoViewSet(viewsets.ModelViewSet):
             return Response({'message': 'Кадры видео сохранены и обработаны для удаления шума'}, status=200)
         except Exception as e:
             return Response({'error': str(e)}, status=500)
+
+
+class RTSUrlViewSet(viewsets.ModelViewSet):
+    queryset = RTSUrl.objects.all()
+    serializer_class = RTSUrlSerializer
