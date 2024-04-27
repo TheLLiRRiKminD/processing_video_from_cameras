@@ -1,8 +1,7 @@
 from datetime import datetime
 import django_filters
-from rest_framework.response import Response
+from django.core.exceptions import BadRequest
 from video_frame.models import VideoFrame
-from rest_framework import status
 
 
 class DateCreatedFilter(django_filters.Filter):
@@ -14,8 +13,7 @@ class DateCreatedFilter(django_filters.Filter):
                 date_to = datetime.strptime(date_to, '%Y-%m-%d %H:%M:%S').date()
                 return queryset.filter(created_at__gte=date_from, created_at__lte=date_to)
             except ValueError:
-                raise Response({"error": "Invalid date format. Expected YYYY-MM-DD HH:MM:SS"},
-                               status=status.HTTP_400_BAD_REQUEST)
+                raise BadRequest("Неверный формат даты, попробуйте YYYY-MM-DD HH:MM:SS")
         return queryset
 
 
