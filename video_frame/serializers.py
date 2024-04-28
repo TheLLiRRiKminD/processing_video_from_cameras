@@ -4,7 +4,7 @@ from .models import VideoFrame
 
 class VideoFrameSerializer(serializers.ModelSerializer):
     """
-    Сериализатор модели RTSUrl
+    Сериализатор модели VideoFrame
     """
     class Meta:
         model = VideoFrame
