@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 import ffmpeg
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets
 import cv2
@@ -10,8 +11,13 @@ from video_frame.models import VideoFrame
 
 
 class VideoViewSet(viewsets.ModelViewSet):
+    """
+    Представление для модели Video и создания подключения к камере
+    В тело запроса передается параметр id ссылки на камеру
+    """
     serializer_class = VideoSerializer
     queryset = Video.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, **kwargs):
         try:
@@ -22,7 +28,7 @@ class VideoViewSet(viewsets.ModelViewSet):
 
             process = (
                 ffmpeg
-                .input(camera, rtsp_transport='tcp',
+                .input(camera.URL, rtsp_transport='tcp',
                        timeout=0)  # Устанавливаем время ожидания в 0 для бесконечного ожидания
                 .output('pipe:', format='rawvideo', pix_fmt='bgr24')
                 .run_async(pipe_stdout=True)
@@ -53,5 +59,9 @@ class VideoViewSet(viewsets.ModelViewSet):
 
 
 class RTSUrlViewSet(viewsets.ModelViewSet):
+    """
+    Представление для добавления в базу ссылок на RTS камеры
+    """
     queryset = RTSUrl.objects.all()
     serializer_class = RTSUrlSerializer
+    permission_classes = [IsAuthenticated]

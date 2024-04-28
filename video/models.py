@@ -2,8 +2,10 @@ from django.db import models
 
 
 class Video(models.Model):
+    """
+    Модель Video
+    """
     name = models.CharField(max_length=100)
-    video_file = models.FileField(upload_to='videos/')
     created_at = models.DateTimeField(auto_now_add=True)
     RTSUrl = models.ForeignKey('RTSUrl', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -16,6 +18,9 @@ class Video(models.Model):
 
 
 class RTSUrl(models.Model):
+    """
+    Модель для добавления нескольких адресов камер
+    """
     URL = models.CharField(max_length=500)
     location = models.CharField(max_length=100, null=True, blank=True)
 
