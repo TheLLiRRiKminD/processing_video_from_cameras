@@ -1,5 +1,4 @@
 from video.apps import VideoConfig
-
 from rest_framework.routers import DefaultRouter
 from .views import VideoViewSet, RTSUrlViewSet
 
