@@ -4,21 +4,13 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,9 +61,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -84,9 +73,6 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'users.User'
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -103,9 +89,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = os.getenv('TZ')
@@ -113,9 +96,6 @@ TIME_ZONE = os.getenv('TZ')
 USE_I18N = True
 
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 
 MEDIA_URL = '/media/'
@@ -125,9 +105,6 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -151,7 +128,7 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 
 CELERY_TASK_TRACK_STARTED = True
 
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # URL для брокера сообщений
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # URL для брокера
 CELERY_BEAT_SCHEDULE = {
     'delete_old_videos': {
         'task': 'video.tasks.delete_old_videos_task',
