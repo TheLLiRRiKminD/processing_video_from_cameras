@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets
 import cv2
@@ -9,8 +10,13 @@ from video_frame.models import VideoFrame
 
 
 class VideoViewSet(viewsets.ModelViewSet):
+    """
+    Представление для модели Video и создания подключения к камере
+    В тело запроса передается параметр id ссылки на камеру
+    """
     serializer_class = VideoSerializer
     queryset = Video.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, **kwargs):
         try:
@@ -53,5 +59,9 @@ class VideoViewSet(viewsets.ModelViewSet):
 
 
 class RTSUrlViewSet(viewsets.ModelViewSet):
+    """
+    Представление для добавления в базу ссылок на RTS камеры
+    """
     queryset = RTSUrl.objects.all()
     serializer_class = RTSUrlSerializer
+    permission_classes = [IsAuthenticated]

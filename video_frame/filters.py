@@ -5,6 +5,9 @@ from video_frame.models import VideoFrame
 
 
 class DateCreatedFilter(django_filters.Filter):
+    """
+    Фильтр для кадров из потока по дате создания
+    """
     def filter(self, queryset, value):
         if value is not None:
             try:
